@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>드림 페어틀</title>
+<meta name="description" content="편집 프로그램 없이 페어틀을 채워보세요.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#2a2763; --ink:#1f1d45; --mist:#ece8fb; --lav:#b9b0ee;
+  --peach:#ffd3c0; --moon:#fff1b8; --card:#fffdfb; --line:#d9d2f4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Gowun Dodum','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  color:var(--ink); line-height:1.7;
+  background:#fff7f2 linear-gradient(#cfc7f5,#ece8fb 420px,#fff7f2 900px) no-repeat;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--night);outline-offset:3px;border-radius:6px}
+
+/* 상단 메뉴 */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  max-width:1000px;margin:0 auto;padding:18px 20px}
+.brand{font-family:'Gowun Batang',serif;font-weight:700;font-size:1.1rem;text-decoration:none}
+.menu{display:flex;gap:6px}
+.menu a,.menu button{font:inherit;font-size:.95rem;color:var(--ink);background:transparent;
+  border:0;padding:6px 12px;border-radius:999px;cursor:pointer;text-decoration:none}
+.menu a:hover,.menu button:hover{background:rgba(255,255,255,.65)}
+
+/* 히어로 */
+.hero{position:relative;text-align:center;padding:56px 20px 72px;overflow:hidden}
+.moon{width:116px;height:116px;border-radius:50%;margin:0 auto 28px;
+  background:radial-gradient(circle at 35% 35%,#fffbe3,var(--moon) 60%,#f6dd8e);
+  box-shadow:0 0 0 14px rgba(255,241,184,.35),0 0 0 32px rgba(255,241,184,.18),0 12px 50px rgba(120,100,200,.35);
+  animation:float 9s ease-in-out infinite}
+.moon::after{content:"";display:block;width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 70% 62%,rgba(230,200,110,.35) 0 9%,transparent 10%),
+             radial-gradient(circle at 38% 72%,rgba(230,200,110,.3) 0 6%,transparent 7%)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-family:'Gowun Batang',serif;font-weight:700;color:var(--night);
+  font-size:clamp(2.4rem,8vw,4.4rem);line-height:1.15;letter-spacing:-.02em}
+.hero p{max-width:30em;margin:18px auto 0;font-size:1.1rem;color:#46427d}
+.hero .go{display:inline-block;margin-top:28px;padding:12px 26px;border-radius:999px;
+  background:var(--night);color:#fff;text-decoration:none;font-size:1.05rem}
+.hero .go:hover{background:#3a3680}
+
+/* 템플릿 목록 */
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+.wrap h2{font-family:'Gowun Batang',serif;font-size:1.6rem;color:var(--night)}
+.sub{color:#5b5791;margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{font:inherit;font-size:.95rem;padding:6px 16px;border-radius:999px;cursor:pointer;
+  border:1.5px solid var(--lav);background:transparent;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--night);border-color:var(--night);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px}
+.card{display:block;text-decoration:none;background:var(--card);border:1.5px solid var(--line);
+  border-radius:18px;overflow:hidden;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-4px);border-color:var(--lav)}
+.card[hidden]{display:none}
+.info{padding:14px 16px 18px}
+.tag{display:inline-block;font-size:.8rem;background:var(--peach);color:#7a3b22;
+  padding:1px 10px;border-radius:999px;margin-bottom:6px}
+.name{display:block;font-weight:400;font-size:1.05rem}
+
+/* 미리보기 썸네일 (이미지로 교체 가능) */
+.thumb{aspect-ratio:4/3;background:var(--mist);display:flex;gap:10px;padding:18px;align-items:stretch}
+.thumb b{background:#fff;border-radius:10px;flex:1;box-shadow:inset 0 0 0 1.5px var(--line)}
+.t-pair b:nth-child(2){background:#e1daf9}
+.t-header{flex-direction:column;justify-content:center}
+.t-header b{flex:0 0 28%;background:repeating-linear-gradient(45deg,#fff 0 10px,#e1daf9 10px 20px)}
+.t-header b:nth-child(2){flex:0 0 14%;opacity:.6}
+.t-main{flex-direction:column}
+.t-main b:nth-child(1){flex:0 0 22%;max-width:22%;aspect-ratio:1;border-radius:50%;background:var(--peach)}
+.t-main b:nth-child(3){flex:.5}
+.t-log{flex-direction:column;gap:7px}
+.t-log b{flex:0 0 10%;border-radius:6px}
+.t-log b:nth-child(2n){margin-right:25%}
+.t-log b:nth-child(1){background:#e1daf9;margin-right:55%}
+
+/* 안내 창 */
+dialog{border:0;border-radius:20px;padding:28px;max-width:min(560px,92vw);width:100%;
+  background:var(--card);color:var(--ink);margin:auto}
+dialog::backdrop{background:rgba(31,29,69,.5)}
+dialog h3{font-family:'Gowun Batang',serif;font-size:1.3rem;margin-bottom:12px;color:var(--night)}
+dialog h4{margin:16px 0 4px;font-size:1rem}
+dialog p,dialog li{font-size:.95rem;color:#3d3a73}
+dialog ul{padding-left:1.2em}
+dialog .close{float:right;font:inherit;background:var(--mist);border:0;border-radius:999px;
+  padding:4px 14px;cursor:pointer;color:var(--ink)}
+
+footer{text-align:center;padding:28px 20px 40px;font-size:.9rem;color:#5b5791}
+
+@media (prefers-reduced-motion:reduce){
+  .moon{animation:none} html{scroll-behavior:auto} .card{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#">드림 페어틀</a>
+  <nav class="menu" aria-label="메뉴">
+    <!-- 본인 트위터(X) 주소로 바꾸세요 -->
+    <a href="https://x.com/" target="_blank" rel="noopener">X(트위터)</a>
+    <button type="button" data-open="bug">버그·문의</button>
+    <button type="button" data-open="guide">이용 안내</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="moon" aria-hidden="true"></div>
+  <h1>드림 페어틀</h1>
+  <p>편집 프로그램 없이 글자와 이미지만 넣어 페어틀을 완성해요. 틀을 골라 바로 시작하세요.</p>
+  <a class="go" href="#templates">틀 고르기</a>
+</section>
+
+<main class="wrap" id="templates">
+  <h2>틀 목록</h2>
+  <p class="sub">새로운 틀은 만들어지는 대로 하나씩 추가돼요.</p>
+  <div class="chips" id="chips" role="group" aria-label="분류"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>© 드림 페어틀 · Ver 1.0.0</footer>
+
+<dialog id="bug">
+  <button class="close" type="button" data-close>닫기</button>
+  <h3>버그·문의</h3>
+  <p>오류나 건의 사항은 X(트위터) DM이나 멘션으로 보내주세요. 어떤 틀에서, 어떤 순서로 눌렀을 때 문제가 생겼는지 적어주시면 확인이 빨라요.</p>
+</dialog>
+
+<dialog id="guide">
+  <button class="close" type="button" data-close>닫기</button>
+  <h3>이용 안내</h3>
+  <!-- 아래 내용은 예시입니다. 실제 서비스 방식에 맞게 수정하세요 -->
+  <h4>개인정보</h4>
+  <p>회원가입이 없고, 이름이나 연락처 같은 개인정보를 수집하지 않아요.</p>
+  <h4>작업 내용 저장</h4>
+  <p>작업 중인 내용은 사용 중인 기기의 브라우저에만 임시로 저장돼요. 캐시를 지우면 사라지니, 완성한 작업은 꼭 이미지로 내려받아 보관하세요.</p>
+  <h4>저작권</h4>
+  <p>직접 올린 이미지와 완성한 결과물에 대한 책임은 사용자에게 있어요. 다른 사람의 저작물은 허락받은 것만 사용해주세요.</p>
+  <h4>업데이트 내역</h4>
+  <ul><li>Ver 1.0.0 — 사이트 공개</li></ul>
+</dialog>
+
+<script>
+// 틀 목록: 새 틀은 이 배열에 한 줄만 추가하면 됩니다.
+// kind는 미리보기 모양(pair, header, main, log)이고, 실제 이미지는 thumb 자리에 <img>로 바꿔 넣으면 돼요.
+const templates = [
+  {id:'pair-simple', tag:'자료정리', name:'심플 페어정리', kind:'pair'},
+  {id:'pair-dream',  tag:'자료정리', name:'드림 페어정리', kind:'pair'},
+  {id:'header-pattern', tag:'헤더', name:'패턴 헤더', kind:'header'},
+  {id:'main-tweet',  tag:'메인트', name:'메인트 생성기', kind:'main'},
+  {id:'log-simple',  tag:'글', name:'글로그 · 기본형', kind:'log'},
+  {id:'log-pair',    tag:'글', name:'글로그 · 페어형', kind:'log'}
+];
+
+const grid = document.getElementById('grid');
+const chips = document.getElementById('chips');
+
+grid.innerHTML = templates.map(t => `
+  <a class="card" href="editor.html?id=${t.id}" data-tag="${t.tag}">
+    <div class="thumb t-${t.kind}" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
+    <div class="info"><span class="tag">${t.tag}</span><span class="name">${t.name}</span></div>
+  </a>`).join('');
+
+const tags = ['전체', ...new Set(templates.map(t => t.tag))];
+chips.innerHTML = tags.map((t, i) =>
+  `<button class="chip" type="button" aria-pressed="${i === 0}" data-tag="${t}">${t}</button>`).join('');
+
+chips.addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === btn));
+  grid.querySelectorAll('.card').forEach(c => {
+    c.hidden = btn.dataset.tag !== '전체' && c.dataset.tag !== btn.dataset.tag;
+  });
+});
+
+document.querySelectorAll('[data-open]').forEach(b =>
+  b.addEventListener('click', () => document.getElementById(b.dataset.open).showModal()));
+document.querySelectorAll('dialog').forEach(d => {
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+  d.querySelector('[data-close]').addEventListener('click', () => d.close());
+});
+</script>
+</body>
+</html>
